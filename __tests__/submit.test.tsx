@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom'
-import { deleteCRT, submitCRT } from '@/app/submit/actions'
+import { submitCRT } from '@/app/submit/actions'
 
 describe('Submit Form', () => {
   it('handles valid submission', async () => {
