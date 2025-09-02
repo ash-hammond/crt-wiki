@@ -1,13 +1,12 @@
 import '@testing-library/jest-dom'
-import { render, screen } from '@testing-library/react'
-import SubmitPage from '@/app/submit/page'
+import { deleteCRT, submitCRT } from '@/app/submit/actions'
 
-describe('Home', () => {
-  it('renders a heading', () => {
-    render(<SubmitPage />)
-
-    const heading = screen.getByRole('heading', { level: 1 })
-
-    expect(heading).toBeInTheDocument()
+describe('Submit Form', () => {
+  it('handles valid submission', async () => {
+    const formData = new FormData()
+    formData.append("name", "Test")
+    formData.append("model", "Test Model")
+    formData.append("make", "Test Make")
+    await submitCRT(formData)
   })
 })

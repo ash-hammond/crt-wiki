@@ -1,14 +1,27 @@
 "use server";
 
-import { PrismaClient } from "../../generated/prisma";
+import prisma from "@/client";
+import { CRT } from "../../generated/prisma";
 
-const prisma = new PrismaClient();
+export async function deleteCRT(crt: CRT) {
+  await prisma.cRTImage.deleteMany({
+    where: {
+      crtId: crt.id
+    }
+  })
+
+  await prisma.cRT.delete({
+    where: {
+      id: crt.id
+    }
+  })
+}
 
 export async function submitCRT(formData: FormData) {
   try {
     const imagesJson = formData.get("images") as string;
     const images = JSON.parse(imagesJson || "[]");
-    
+
     const data = {
       name: formData.get("name") as string,
       brand: formData.get("brand") as string || null,
