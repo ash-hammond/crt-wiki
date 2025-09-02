@@ -1,0 +1,53 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+
+model CRTImage {
+  id          Int     @id @default(autoincrement())
+  crt         CRT     @relation(fields: [crtId], references: [id])
+  crtId       Int
+  url         String
+  description String?
+}
+
+model CRT {
+  id                         Int        @id @default(autoincrement())
+  name                       String
+  brand                      String?
+  manufacturer               String?
+  author                     String?
+  model                      String?
+  series                     String?
+  screenSize                 String?
+  inputs                     String?
+  supportedResolutions       String?
+  formats                    String?
+  aspectRatio                String?
+  tubeMake                   String?
+  chassis                    String?
+  audio                      String?
+  purpose                    String?
+  yearLaunched               Int?
+  yearDiscontinued           Int?
+  weight                     String?
+  physicalSize               String?
+  degaussingType             String?
+  assemblyCountry            String?
+  physicalDescription        String?
+  operationalDescription     String?
+  serviceManualLink          String?
+  ownersManualLink           String?
+  summary                    String?
+  similarMakesAndModels      String?
+  originalRemoteMakeAndModel String?
+  images                     CRTImage[]
+}
