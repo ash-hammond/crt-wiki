@@ -13,6 +13,9 @@ export default function Home() {
           </li>
         </ol>
       </main>
+      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
+        <a className="underline" href="https://github.com/ash-hammond/crt-wiki" target="_blank">GitHub Repository</a>
+      </footer>
     </div>
   );
 }
