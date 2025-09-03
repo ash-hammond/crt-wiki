@@ -7,3 +7,9 @@ Tech Stack
 
 Deployment
 - Railway
+
+.env variables
+- `DATABASE_URL`: Prisma
+- `DISCORD_CLIENT_ID`
+- `DISCORD_CLIENT_SECRET`
+- `AUTH_SECRET`: Next.js 
