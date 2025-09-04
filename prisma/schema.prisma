@@ -12,7 +12,7 @@ datasource db {
 }
 
 model Admin {
-  discordId Int @id
+  discordId BigInt @id
 }
 
 model CRTImage {
