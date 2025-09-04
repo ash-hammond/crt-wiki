@@ -11,6 +11,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Admin {
+  discordId Int @id
+}
+
 model CRTImage {
   id          Int     @id @default(autoincrement())
   crt         CRT     @relation(fields: [crtId], references: [id])

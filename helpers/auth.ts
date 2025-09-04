@@ -8,7 +8,7 @@ import type { DefaultSession, NextAuthOptions } from "next-auth"
 import { getServerSession } from "next-auth"
 
 export type DiscordUser = {
-    id: string | null | undefined
+    id: number | null | undefined
 } & DefaultSession['user']
 
 export const config = {
@@ -22,7 +22,7 @@ export const config = {
         async session({ session, token, user }) {
             if (token) {
                 if (token?.picture?.includes("discord")) {
-                    (session!.user! as DiscordUser).id = token.sub;
+                    (session!.user! as DiscordUser).id = parseInt(token.sub!);
                 }
             }
             return session;
