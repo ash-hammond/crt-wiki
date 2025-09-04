@@ -4,6 +4,7 @@ import { useState } from "react";
 import { submitCRT } from "./actions";
 import { Path, SubmitHandler, useForm, UseFormRegister } from "react-hook-form";
 
+// TODO require at least 1 image
 // BRAND then MODEL #
 type ShallowInputs = {
   model: string
@@ -70,14 +71,14 @@ const INPUT_NAMES: { [P in keyof ShallowInputs]: { title: string, description?: 
   }
 }
 
-export default function SubmitPage() {
-  type Inputs = ShallowInputs & {
-    images?: Array<{
-      url: string,
-      description?: string | null
-    }>
-  }
+type Inputs = ShallowInputs & {
+  images?: Array<{
+    url: string,
+    description?: string | null
+  }>
+}
 
+export default function SubmitPage() {
   const {
     register,
     handleSubmit,
@@ -133,7 +134,7 @@ export default function SubmitPage() {
         {...register(label)}
         className="w-full px-3 py-2 border border-gray-300 rounded-md"
       />
-    </div>
+    </div >
   }
 
   const sections: [string, (keyof ShallowInputs)[]][] = [
@@ -200,14 +201,17 @@ export default function SubmitPage() {
         ))}
       </div>
 
-      <button
-        type="submit"
-        disabled={submitting}
-        className="w-full px-6 py-3 bg-green-500 text-white rounded-md hover:bg-green-600 disabled:bg-gray-400"
-      >
-        {submitting ? "Submitting..." : "Submit CRT"}
-      </button>
+      <SubmitButton disabled={submitting} />
     </form>
   );
 }
 
+function SubmitButton({ disabled }: { disabled: boolean }) {
+  return <button
+    type="submit"
+    disabled={disabled}
+    className="w-full px-6 py-3 bg-green-500 text-white rounded-md hover:bg-green-600 disabled:bg-gray-400"
+  >
+    {disabled ? "Submitting..." : "Submit CRT"}
+  </button>
+}
