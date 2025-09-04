@@ -25,11 +25,10 @@ model CRTImage {
 
 model CRT {
   id                         Int        @id @default(autoincrement())
-  name                       String
+  model                      String
   brand                      String?
   manufacturer               String?
   author                     String?
-  model                      String?
   series                     String?
   screenSize                 String?
   inputs                     String?

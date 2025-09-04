@@ -4,12 +4,24 @@ import type {
     NextApiResponse,
 } from "next"
 import DiscordProvider from 'next-auth/providers/discord'
-import type { DefaultSession, NextAuthOptions } from "next-auth"
+import type { DefaultSession, NextAuthOptions, Session } from "next-auth"
 import { getServerSession } from "next-auth"
+import prisma from "@/client"
+import assert from "assert"
 
-export type DiscordUser = {
-    id: number | null | undefined
-} & DefaultSession['user']
+export async function isAdmin(session: DiscordSession) {
+    assert(session.user?.id)
+    return await prisma.admin.findFirst({
+        where: {
+            discordId: session.user.id
+        }
+    }) != null
+}
+export type DiscordSession = {
+    user: {
+        id: number | null | undefined
+    }
+} & DefaultSession
 
 export const config = {
     providers: [
@@ -22,7 +34,7 @@ export const config = {
         async session({ session, token, user }) {
             if (token) {
                 if (token?.picture?.includes("discord")) {
-                    (session!.user! as DiscordUser).id = parseInt(token.sub!);
+                    (session as DiscordSession).user!.id = parseInt(token.sub!);
                 }
             }
             return session;
@@ -37,5 +49,5 @@ export function auth(
         | [NextApiRequest, NextApiResponse]
         | []
 ) {
-    return getServerSession(...args, config)
+    return getServerSession(...args, config) as Promise<DiscordSession | null>
 }
