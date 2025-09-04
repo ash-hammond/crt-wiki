@@ -18,7 +18,7 @@ export async function isAdmin(session: DiscordSession) {
     }) != null
 }
 export type DiscordSession = {
-    user: {
+    user?: {
         id: number | null | undefined
     }
 } & DefaultSession
