@@ -159,9 +159,9 @@ function Input({ type, label, description, title, register, errors, required }: 
     {description && <p className="text-xs">{description}</p>}
     <input
       type={type}
-      {...register(label, { required: required })}
+      {...register(label, { required: required, valueAsNumber: type == "number" })}
       className="w-full px-3 py-2 border border-gray-300 rounded-md"
     />
-    {errors[label] && <div className="bg-red-400 text-white p-1">{errors[label].message}</div>}
+    {errors[label]?.message && <div className="bg-red-400 text-white p-1">{errors[label].message}</div>}
   </div >
 }
