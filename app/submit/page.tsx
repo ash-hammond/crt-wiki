@@ -14,23 +14,7 @@ export default function SubmitPage() {
   } = useForm<CRTSubmission>({
     resolver: zodResolver(CRTSubmissionSchema)
   })
-
-  // const [images, setImages] = useState<{ url: string; description: string }[]>([]);
   const [submitting, setSubmitting] = useState(false);
-
-  // const handleAddImage = () => {
-  //   setImages([...images, { url: "", description: "" }]);
-  // };
-
-  // const handleRemoveImage = (index: number) => {
-  //   setImages(images.filter((_, i) => i !== index));
-  // };
-
-  // const handleImageChange = (index: number, field: "url" | "description", value: string) => {
-  //   const updated = [...images];
-  //   updated[index][field] = value;
-  //   setImages(updated);
-  // };
 
   const onSubmit: SubmitHandler<CRTSubmission> = async (formData) => {
     setSubmitting(true);
@@ -85,48 +69,6 @@ export default function SubmitPage() {
         <Input type="number" title="Year Launched" label="yearLaunched" register={register} errors={errors} />
         <Input type="number" title="Year Discontinued" label="yearDiscontinued" register={register} errors={errors} />
       </Section>
-      {/* <div className="space-y-4">
-        <div className="flex justify-between items-center">
-          <h2 className="text-xl font-semibold">Images</h2>
-          <button
-            type="button"
-            onClick={handleAddImage}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-          >
-            Add Image
-          </button>
-        </div>
-
-        {images.map((image, index) => (
-          <div key={index} className="p-4 border border-gray-300 rounded-md space-y-2">
-            <div className="flex justify-between items-center">
-              <h3 className="font-medium">Image {index + 1}</h3>
-              <button
-                type="button"
-                onClick={() => handleRemoveImage(index)}
-                className="text-red-500 hover:text-red-700"
-              >
-                Remove
-              </button>
-            </div>
-            <input
-              type="url")
-              placeholder="Image URL"
-              value={image.url}
-              onChange={(e) => handleImageChange(index, "url", e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md"
-            />
-            <input
-              type="text"
-              placeholder="Description (optional)"
-              value={image.description}
-              onChange={(e) => handleImageChange(index, "description", e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md"
-            />
-          </div>
-        ))}
-      </div> */}
-
       <SubmitButton disabled={submitting} />
     </form>
   );
