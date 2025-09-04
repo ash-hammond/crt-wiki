@@ -1,54 +1,25 @@
 'use server'
 import prisma from "@/client";
 import { auth, isAdmin } from "@/helpers/auth";
+import { CRTSubmissionSchema } from "@/helpers/crt";
 import assert from "assert";
+import * as z from "zod";
 
-export async function submitCRT(formData: FormData) {
+export async function submitCRT(data: CRTSubmission) {
+    CRTSubmissionSchema.parse(data)
     const session = await auth();
     assert(session)
     if (!isAdmin(session)) return false
 
-    const imagesJson = formData.get("images") as string;
-    const images = JSON.parse(imagesJson || "[]");
-    const data = {
-        brand: formData.get("brand") as string || null,
-        manufacturer: formData.get("manufacturer") as string || null,
-        author: formData.get("author") as string || null,
-        model: formData.get("model") as string,
-        series: formData.get("series") as string || null,
-        screenSize: formData.get("screenSize") as string || null,
-        inputs: formData.get("inputs") as string || null,
-        supportedResolutions: formData.get("supportedResolutions") as string || null,
-        formats: formData.get("formats") as string || null,
-        aspectRatio: formData.get("aspectRatio") as string || null,
-        tubeMake: formData.get("tubeMake") as string || null,
-        chassis: formData.get("chassis") as string || null,
-        audio: formData.get("audio") as string || null,
-        purpose: formData.get("purpose") as string || null,
-        yearLaunched: formData.get("yearLaunched") ? parseInt(formData.get("yearLaunched") as string) : null,
-        yearDiscontinued: formData.get("yearDiscontinued") ? parseInt(formData.get("yearDiscontinued") as string) : null,
-        weight: formData.get("weight") as string || null,
-        physicalSize: formData.get("physicalSize") as string || null,
-        degaussingType: formData.get("degaussingType") as string || null,
-        assemblyCountry: formData.get("assemblyCountry") as string || null,
-        physicalDescription: formData.get("physicalDescription") as string || null,
-        operationalDescription: formData.get("operationalDescription") as string || null,
-        serviceManualLink: formData.get("serviceManualLink") as string || null,
-        ownersManualLink: formData.get("ownersManualLink") as string || null,
-        summary: formData.get("summary") as string || null,
-        similarMakesAndModels: formData.get("similarMakesAndModels") as string || null,
-        originalRemoteMakeAndModel: formData.get("originalRemoteMakeAndModel") as string || null,
-    };
-
     const crt = await prisma.cRT.create({
         data: {
             ...data,
-            images: {
-                create: images.filter((img: any) => img.url).map((img: any) => ({
-                    url: img.url,
-                    description: img.description || null,
-                })),
-            },
+            // images: {
+            //     create: (data.images || []).filter((img: any) => img.url).map((img: any) => ({
+            //         url: img.url,
+            //         description: img.description || null,
+            //     })),
+            // },
         },
         include: {
             images: true,
@@ -57,3 +28,38 @@ export async function submitCRT(formData: FormData) {
 
     return { success: true, crt };
 }
+// TODO require at least 1 image
+// BRAND then MODEL #
+
+export type CRTSubmission = z.infer<typeof CRTSubmissionSchema>
+
+export type ShallowInputs = {
+    model: string;
+    brand: string;
+    manufacturer?: string;
+    author?: string;
+    series?: string;
+    screenSize: string;
+    inputs?: string;
+    supportedResolutions?: string;
+    formats?: string;
+    aspectRatio: string;
+    tubeMake?: string;
+    chassis?: string;
+    audio?: string;
+    purpose?: string;
+    yearLaunched?: number;
+    yearDiscontinued?: number;
+    weight?: string;
+    physicalSize?: string;
+    degaussingType?: string;
+    assemblyCountry?: string;
+    physicalDescription: string;
+    operationalDescription?: string;
+    serviceManualLink?: string;
+    ownersManualLink?: string;
+    summary: string;
+    similarMakesAndModels?: string;
+    originalRemoteMakeAndModel?: string;
+};
+

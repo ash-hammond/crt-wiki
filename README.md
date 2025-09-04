@@ -2,8 +2,14 @@
 
 Tech Stack
 - Next.js
-- Prisma
-- Postgres
+- Typescript
+- Tailwind CSS
+- Prisma 
+- Postgres 
+- Data validation through Zod
+- React Hook Form
+- Jest
+- ESLint
 
 Deployment
 - Railway
