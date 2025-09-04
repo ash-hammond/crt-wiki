@@ -1,5 +1,2 @@
 ignoredBuiltDependencies:
   - '@prisma/client'
-
-onlyBuiltDependencies:
-  - msgpackr-extract
