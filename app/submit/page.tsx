@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { submitCRT } from "./actions";
-import { Path, SubmitHandler, useForm, UseFormRegister } from "react-hook-form";
+import { FieldErrors, Path, RegisterOptions, SubmitHandler, useForm, UseFormRegister } from "react-hook-form";
 
 // TODO require at least 1 image
 // BRAND then MODEL #
@@ -36,11 +36,40 @@ type ShallowInputs = {
   originalRemoteMakeAndModel?: string
 }
 
-const INPUT_NAMES: { [P in keyof ShallowInputs]: { title: string, description?: string } } = {
-  model: { title: "Model", description: "This device's identification" },
-  brand: { title: "Brand", description: "The company advertised on the device" },
+function Input({ label, register, errors }: { label: Path<ShallowInputs>, register: UseFormRegister<Inputs>, errors: FieldErrors<Inputs> }) {
+  const required = INPUT_NAMES[label]!.requirements?.required
+  return <div>
+    <label className="block text-sm font-medium mb-1">
+      {INPUT_NAMES[label]!.title + (required ? "*" : "")}
+    </label>
+    {INPUT_NAMES[label]!.description ? <p className="text-xs">{INPUT_NAMES[label]!.description}</p> : null}
+    <input
+      {...register(label, INPUT_NAMES[label]!.requirements)}
+      className="w-full px-3 py-2 border border-gray-300 rounded-md"
+    />
+    {errors[label]?.type == "required" && <div className="bg-red-400 text-white p-1">required.</div>}
+  </div >
+}
+
+const INPUT_NAMES: { [P in keyof ShallowInputs]: { title: string, description?: string, requirements?: RegisterOptions<ShallowInputs> } } = {
+  model: {
+    title: "Model", description: "This device's identification",
+    requirements: {
+      required: true
+    }
+  },
+  brand: {
+    title: "Brand", description: "The company advertised on the device",
+    requirements: {
+      required: true
+    }
+  },
   manufacturer: { title: "Manufacturer", description: "The company who made the device" },
-  author: { title: "Author", description: "Your name" },
+  author: {
+    title: "Author", description: "Your name", requirements: {
+      required: true
+    }
+  },
   series: {
     title: "Series",
     description: "The brand's series to which this model belongs to, aka product line-up"
@@ -60,11 +89,20 @@ const INPUT_NAMES: { [P in keyof ShallowInputs]: { title: string, description?: 
   physicalSize: { title: "Physical Size (LxWxH in inches)" },
   degaussingType: { title: "Degaussing Type", description: "Does the tube include degaussing?" },
   assemblyCountry: { title: "Assembly Country" },
-  physicalDescription: { title: "Physical Description" },
+  physicalDescription: {
+    title: "Physical Description",
+    requirements: {
+      required: true
+    }
+  },
   operationalDescription: { title: "Operational Description" },
   serviceManualLink: { title: "Service Manual Link" },
   ownersManualLink: { title: "Owner's Manual Link" },
-  summary: { title: "Summary", description: "Description" },
+  summary: {
+    title: "Summary", description: "Description", requirements: {
+      required: true
+    }
+  },
   similarMakesAndModels: { title: "Similar Makes and Models" },
   originalRemoteMakeAndModel: {
     title: "Original Remote Make and Model"
@@ -124,22 +162,9 @@ export default function SubmitPage() {
     }
   };
 
-  function Input({ label }: { label: Path<ShallowInputs>, register: UseFormRegister<Inputs> }) {
-    return <div>
-      <label className="block text-sm font-medium mb-1">
-        {INPUT_NAMES[label]!.title}
-      </label>
-      {INPUT_NAMES[label]!.description ? <p className="text-xs">{INPUT_NAMES[label]!.description}</p> : null}
-      <input
-        {...register(label)}
-        className="w-full px-3 py-2 border border-gray-300 rounded-md"
-      />
-    </div >
-  }
-
   const sections: [string, (keyof ShallowInputs)[]][] = [
     ["Contributor", ["author"]],
-    ["Identification", ["tubeMake", "model", "brand", "series", "similarMakesAndModels", "originalRemoteMakeAndModel"]],
+    ["Identification", ["brand", "model", "tubeMake", "series", "similarMakesAndModels", "originalRemoteMakeAndModel"]],
     ["Screen", ["screenSize", "supportedResolutions", "degaussingType", "aspectRatio"]],
     ["Physical", ["weight", "physicalDescription", "physicalSize"]],
     ["Operations", ["operationalDescription", "inputs"]],
@@ -152,12 +177,12 @@ export default function SubmitPage() {
     <form className="min-h-screen p-8 max-w-4xl mx-auto space-y-6" onSubmit={handleSubmit(onSubmit)}>
       <h1 className="text-3xl font-bold mb-8">Submit CRT Information</h1>
       {sections.map((section, i) =>
-        <>
+        <div key={i}>
           <h2 className="text-xl">{section[0]}</h2>
           <div key={i} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {section[1].map((field, j) => <Input key={j} register={register} label={field} />)}
+            {section[1].map((field, j) => <Input errors={errors} key={j} register={register} label={field} />)}
           </div>
-        </>
+        </div>
       )}
       <div className="space-y-4">
         <div className="flex justify-between items-center">
