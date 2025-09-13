@@ -35,7 +35,10 @@ export default function SubmitPage() {
     <form className="min-h-screen p-8 max-w-4xl mx-auto space-y-6" onSubmit={handleSubmit(onSubmit)}>
       <h1 className="text-3xl font-bold mb-8">Submit CRT Information</h1>
       <Input required title="Author" label="author" register={register} errors={errors} />
-      <Input required title="Summary" label="summary" register={register} errors={errors} />
+      <Label id="summary" title="Summary" required />
+      <textarea rows={3} cols={90} {...register("summary", { required: true })}>
+
+      </textarea>
       <Section title="Identification">
         <Input required title="Brand" description="The company advertised on the device" label="brand" register={register} errors={errors} />
         <Input required title="Model" description="This device's identification" label="model" register={register} errors={errors} />
@@ -93,12 +96,17 @@ function SubmitButton({ disabled }: { disabled: boolean }) {
   </button>
 }
 
+function Label({ title, required, description, id }: { description?: string, id: string, title: string, required?: boolean }) {
+  return <><label id={id} className="block text-sm font-medium mb-1">
+    {title + (required ? "*" : "")}
+    {description && <p className="text-xs">{description}</p>}
+  </label>
+  </>
+}
+
 function Input({ type, label, description, title, register, errors, required }: { type?: HTMLInputTypeAttribute, required?: boolean, description?: string, title: string, label: Path<ShallowInputs>, register: UseFormRegister<CRTSubmission>, errors: FieldErrors<CRTSubmission> }) {
   return <div>
-    <label className="block text-sm font-medium mb-1">
-      {title + (required ? "*" : "")}
-    </label>
-    {description && <p className="text-xs">{description}</p>}
+    <Label id={label} title={title} required={required} description={description} />
     <input
       type={type}
       {...register(label, { required: required, valueAsNumber: type == "number" })}
