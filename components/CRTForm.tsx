@@ -1,3 +1,5 @@
+'use client'
+import { editCRT } from "@/app/crt/[slug]/edit/actions";
 import { CRTSubmission } from "@/app/submit/actions";
 import { CRT_FIELD_NAMES, CRTSubmissionSchema } from "@/helpers/crt";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -5,7 +7,13 @@ import { HTMLInputTypeAttribute, PropsWithChildren, useState } from "react";
 import { useForm, SubmitHandler, FieldErrors, Path, UseFormRegister } from "react-hook-form";
 
 
-export function CRTForm({ action }: { action: (data: CRTSubmission) => Promise<any>; }) {
+export function EditCRTForm({ values, id }: { id: number, values: CRTSubmission }) {
+    return <CRTForm values={values} action={async (data) => {
+        return await editCRT(data, id)
+    }} />
+}
+
+export function CRTForm({ action, values }: { values?: CRTSubmission, action: (data: CRTSubmission) => Promise<any>; }) {
     const {
         register, handleSubmit, formState: { errors }
     } = useForm<CRTSubmission>({
@@ -27,46 +35,58 @@ export function CRTForm({ action }: { action: (data: CRTSubmission) => Promise<a
         }
     };
 
+    function Input({ type, label, description, required }: { type?: HTMLInputTypeAttribute; required?: boolean; description?: string; label: Path<CRTSubmission>; }) {
+        const title = CRT_FIELD_NAMES[label];
+        return <div>
+            <Label id={label} title={title} required={required} description={description} />
+            <input
+                value={values && values[label] ? values[label] : undefined}
+                type={type}
+                {...register(label, { required: required, valueAsNumber: type == "number" })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md" />
+            {errors[label]?.message && <div className="bg-red-400 text-white p-1">{errors[label].message}</div>}
+        </div>;
+    }
     return (
         <form className="min-h-screen p-8 max-w-4xl mx-auto space-y-6" onSubmit={handleSubmit(onSubmit)}>
             <h1 className="text-3xl font-bold mb-8">Submit CRT Information</h1>
-            <Input required title="Author" label="author" register={register} errors={errors} />
+            <Input required label="author" />
             <Label id="summary" title="Summary" required />
             <textarea rows={3} cols={90} {...register("summary", { required: true })}>
 
             </textarea>
             <Section title="Identification">
-                <Input required title="Brand" description="The company advertised on the device" label="brand" register={register} errors={errors} />
-                <Input required title="Model" description="This device's identification" label="model" register={register} errors={errors} />
-                <Input title="Tube Make" description="The device's tube's identification" label="tubeMake" register={register} errors={errors} />
-                <Input title="Series" description="The brand's series to which this model belongs to, aka product line-up" label="series" register={register} errors={errors} />
-                <Input title="Similar Makes and Models" label="similarMakesAndModels" register={register} errors={errors} />
-                <Input title="Original Remote Make and Model" label="originalRemoteMakeAndModel" register={register} errors={errors} />
+                <Input required description="The company advertised on the device" label="brand" />
+                <Input required description="This device's identification" label="model" />
+                <Input description="The device's tube's identification" label="tubeMake" />
+                <Input description="The brand's series to which this model belongs to, aka product line-up" label="series" />
+                <Input label="similarMakesAndModels" />
+                <Input label="originalRemoteMakeAndModel" />
             </Section>
             <Section title="Screen">
-                <Input title="Screen Size" description="The screen's diagonal length in inches" label="screenSize" register={register} errors={errors} />
-                <Input title="Supported Resolutions" label="supportedResolutions" register={register} errors={errors} />
-                <Input title="Degaussing Type" label="degaussingType" register={register} errors={errors} />
-                <Input title="Aspect Ratio" label="aspectRatio" register={register} errors={errors} />
+                <Input description="The screen's diagonal length in inches" label="screenSize" />
+                <Input label="supportedResolutions" />
+                <Input label="degaussingType" />
+                <Input label="aspectRatio" />
             </Section>
             <Section title="Physical">
-                <Input title="Weight" label="weight" register={register} errors={errors} />
-                <Input title="Physical Description" label="physicalDescription" register={register} errors={errors} />
-                <Input title="Physical Size" label="physicalSize" register={register} errors={errors} />
+                <Input label="weight" />
+                <Input label="physicalDescription" />
+                <Input label="physicalSize" />
             </Section>
             <Section title="Operational">
-                <Input title="Operational Description" label="operationalDescription" register={register} errors={errors} />
-                <Input title="Inputs" label="inputs" register={register} errors={errors} />
+                <Input label="operationalDescription" />
+                <Input label="inputs" />
             </Section>
             <Section title="Manuals">
-                <Input title="Service Manual Link" label="serviceManualLink" register={register} errors={errors} />
-                <Input title="Owners Manual Link" label="ownersManualLink" register={register} errors={errors} />
+                <Input label="serviceManualLink" />
+                <Input label="ownersManualLink" />
             </Section>
             <Section title="Manufacturing">
-                <Input title="Manufacturer" label="manufacturer" register={register} errors={errors} />
-                <Input title="Assembly Country" label="assemblyCountry" register={register} errors={errors} />
-                <Input type="string" title="Year Launched" label="yearLaunched" register={register} errors={errors} />
-                <Input type="string" title="Year Discontinued" label="yearDiscontinued" register={register} errors={errors} />
+                <Input label="manufacturer" />
+                <Input label="assemblyCountry" />
+                <Input type="string" label="yearLaunched" />
+                <Input type="string" label="yearDiscontinued" />
             </Section>
             <SubmitButton disabled={submitting} />
         </form>
@@ -97,16 +117,5 @@ function Label({ title, required, description, id }: { description?: string; id:
         {description && <p className="text-xs">{description}</p>}
     </label>
     </>;
-}
-function Input({ type, label, description, register, errors, required }: { type?: HTMLInputTypeAttribute; required?: boolean; description?: string; title: string; label: Path<CRTSubmission>; register: UseFormRegister<CRTSubmission>; errors: FieldErrors<CRTSubmission>; }) {
-    const title = CRT_FIELD_NAMES[label];
-    return <div>
-        <Label id={label} title={title} required={required} description={description} />
-        <input
-            type={type}
-            {...register(label, { required: required, valueAsNumber: type == "number" })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md" />
-        {errors[label]?.message && <div className="bg-red-400 text-white p-1">{errors[label].message}</div>}
-    </div>;
 }
 
