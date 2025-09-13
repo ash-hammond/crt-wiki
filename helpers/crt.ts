@@ -1,3 +1,4 @@
+import { CRT } from "@/generated/prisma";
 import * as z from "zod";
 
 const stringSchema = z.string().min(3, { message: "Must be at least 3 characters" });
@@ -61,4 +62,7 @@ export const CRT_FIELD_NAMES = {
     purpose: "Purpose",
     summary: "Summary",
 };
+export function getCRTDisplayName(crt: CRT) {
+    return `${crt.brand} ${crt.model}`;
+}
 

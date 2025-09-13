@@ -1,7 +1,7 @@
 import prisma from "@/client"
 import DeleteCRTButton from "@/components/deleteCRTButton"
 import NotFound from "@/components/not-found"
-import { CRT_FIELD_NAMES } from "@/helpers/crt"
+import { CRT_FIELD_NAMES, getCRTDisplayName } from "@/helpers/crt"
 import Link from "next/link"
 
 export default async function BlogPostPage({
@@ -23,7 +23,7 @@ export default async function BlogPostPage({
         <div>
             <Link href={`${id}/edit`}>Edit CRT</Link>
             <DeleteCRTButton id={id} />
-            <h1>{crt.brand} {crt.model}</h1>
+            <h1>{getCRTDisplayName(crt)}</h1>
             {
                 ([
                     "tubeMake",
