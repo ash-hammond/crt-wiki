@@ -39,8 +39,8 @@ model CRT {
   chassis                    String?
   audio                      String?
   purpose                    String?
-  yearLaunched               Int?
-  yearDiscontinued           Int?
+  yearLaunched               String?
+  yearDiscontinued           String?
   weight                     String?
   physicalSize               String?
   degaussingType             String?

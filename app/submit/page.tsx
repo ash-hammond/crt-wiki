@@ -1,7 +1,7 @@
 "use client";
 
 import { HTMLInputTypeAttribute, PropsWithChildren, useState } from "react";
-import { CRTSubmission, ShallowInputs, submitCRT } from "./actions";
+import { CRTSubmission, submitCRT } from "./actions";
 import { FieldErrors, Path, RegisterOptions, SubmitHandler, useForm, UseFormRegister } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CRTSubmissionSchema } from "@/helpers/crt";
@@ -104,7 +104,7 @@ function Label({ title, required, description, id }: { description?: string, id:
   </>
 }
 
-function Input({ type, label, description, title, register, errors, required }: { type?: HTMLInputTypeAttribute, required?: boolean, description?: string, title: string, label: Path<ShallowInputs>, register: UseFormRegister<CRTSubmission>, errors: FieldErrors<CRTSubmission> }) {
+function Input({ type, label, description, title, register, errors, required }: { type?: HTMLInputTypeAttribute, required?: boolean, description?: string, title: string, label: Path<CRTSubmission>, register: UseFormRegister<CRTSubmission>, errors: FieldErrors<CRTSubmission> }) {
   return <div>
     <Label id={label} title={title} required={required} description={description} />
     <input
