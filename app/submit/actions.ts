@@ -12,15 +12,7 @@ export async function submitCRT(data: CRTSubmission) {
     if (!isAdmin(session)) return false
 
     const crt = await prisma.cRT.create({
-        data: {
-            ...data,
-            // images: {
-            //     create: (data.images || []).filter((img: any) => img.url).map((img: any) => ({
-            //         url: img.url,
-            //         description: img.description || null,
-            //     })),
-            // },
-        },
+        data: data,
         include: {
             images: true,
         },
