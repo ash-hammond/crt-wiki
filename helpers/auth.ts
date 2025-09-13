@@ -12,7 +12,7 @@ import assert from "assert"
 export async function verifyAdmin() {
     const session = await auth();
     assert(session)
-    return isAdmin(session)
+    return await isAdmin(session)
 }
 
 export async function isAdmin(session: DiscordSession) {

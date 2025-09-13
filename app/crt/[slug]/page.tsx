@@ -1,6 +1,8 @@
 import prisma from "@/client"
+import ApproveCRTButton from "@/components/ApproveCRTButton"
 import DeleteCRTButton from "@/components/deleteCRTButton"
 import NotFound from "@/components/not-found"
+import { verifyAdmin } from "@/helpers/auth"
 import { CRT_FIELD_NAMES, getCRTDisplayName } from "@/helpers/crt"
 import Link from "next/link"
 
@@ -16,13 +18,15 @@ export default async function BlogPostPage({
             id: id
         }
     })
+    const isAdmin = await verifyAdmin()
 
     if (crt == null) return <NotFound />
 
     return (
         <div>
-            <Link href={`${id}/edit`}>Edit CRT</Link>
-            <DeleteCRTButton id={id} />
+            {isAdmin && <Link href={`${id}/edit`}>Edit CRT</Link>}
+            {isAdmin && <DeleteCRTButton id={id} />}
+            {isAdmin && !crt.verified && <ApproveCRTButton id={id} />}
             <h1>{getCRTDisplayName(crt)}</h1>
             {
                 ([

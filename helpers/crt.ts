@@ -63,6 +63,8 @@ export const CRT_FIELD_NAMES = {
     summary: "Summary",
 };
 export function getCRTDisplayName(crt: CRT) {
-    return `${crt.brand} ${crt.model}`;
+    const name = `${crt.brand} ${crt.model}`;
+    if (name.trim().length == 0) return "unnamed"
+    return name
 }
 
