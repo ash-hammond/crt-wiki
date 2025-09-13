@@ -25,6 +25,7 @@ model CRTImage {
 
 model CRT {
   id                         Int        @id @default(autoincrement())
+  verified                   Boolean    @default(false)
   model                      String
   brand                      String?
   manufacturer               String?
