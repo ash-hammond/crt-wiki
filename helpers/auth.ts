@@ -9,6 +9,12 @@ import { getServerSession } from "next-auth"
 import prisma from "@/client"
 import assert from "assert"
 
+export async function verifyAdmin() {
+    const session = await auth();
+    assert(session)
+    return isAdmin(session)
+}
+
 export async function isAdmin(session: DiscordSession) {
     assert(session.user?.id)
     return await prisma.admin.findFirst({
