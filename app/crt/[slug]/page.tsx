@@ -17,7 +17,7 @@ export default async function BlogPostPage({
 
     return (
         <div>
-            <h1>{crt.model}</h1>
+            <h1>{crt.brand} {crt.model}</h1>
         </div>
     )
 }

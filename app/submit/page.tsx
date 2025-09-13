@@ -4,7 +4,7 @@ import { HTMLInputTypeAttribute, PropsWithChildren, useState } from "react";
 import { CRTSubmission, submitCRT } from "./actions";
 import { FieldErrors, Path, RegisterOptions, SubmitHandler, useForm, UseFormRegister } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CRTSubmissionSchema } from "@/helpers/crt";
+import { CRT_FIELD_NAMES, CRTSubmissionSchema } from "@/helpers/crt";
 
 export default function SubmitPage() {
   const {
@@ -69,8 +69,8 @@ export default function SubmitPage() {
       <Section title="Manufacturing">
         <Input title="Manufacturer" label="manufacturer" register={register} errors={errors} />
         <Input title="Assembly Country" label="assemblyCountry" register={register} errors={errors} />
-        <Input type="number" title="Year Launched" label="yearLaunched" register={register} errors={errors} />
-        <Input type="number" title="Year Discontinued" label="yearDiscontinued" register={register} errors={errors} />
+        <Input type="string" title="Year Launched" label="yearLaunched" register={register} errors={errors} />
+        <Input type="string" title="Year Discontinued" label="yearDiscontinued" register={register} errors={errors} />
       </Section>
       <SubmitButton disabled={submitting} />
     </form>
@@ -104,7 +104,8 @@ function Label({ title, required, description, id }: { description?: string, id:
   </>
 }
 
-function Input({ type, label, description, title, register, errors, required }: { type?: HTMLInputTypeAttribute, required?: boolean, description?: string, title: string, label: Path<CRTSubmission>, register: UseFormRegister<CRTSubmission>, errors: FieldErrors<CRTSubmission> }) {
+function Input({ type, label, description, register, errors, required }: { type?: HTMLInputTypeAttribute, required?: boolean, description?: string, title: string, label: Path<CRTSubmission>, register: UseFormRegister<CRTSubmission>, errors: FieldErrors<CRTSubmission> }) {
+  const title = CRT_FIELD_NAMES[label]
   return <div>
     <Label id={label} title={title} required={required} description={description} />
     <input
