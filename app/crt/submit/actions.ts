@@ -7,23 +7,18 @@ import * as z from "zod";
 export async function submitCRT(data: CRTSubmission) {
     CRTSubmissionSchema.parse(data)
     if (!verifyAdmin()) return false
-    const images = data.images
-    data.images = undefined
+    const images = await data.images.map(async (image) => ({
+        description: image.name,
+        data: await image.arrayBuffer()
+    }))
+    const shallowData: any = { ...data }
+    shallowData.images = undefined
 
     const crt = await prisma.cRT.create({
-        data: {
-            ...(data as Omit<CRTSubmission, "images">),
-            images: images.map((image) => ({
-                url: URL.createObjectURL(image),
-                description: image.name,
-            })),
-        },
-        include: {
-            images: true,
-        },
-    });
+        data: shallowData as Omit<CRTSubmission, "images">
+    })
 
-    return { success: true, crt };
+    return { success: true };
 }
 
 export type CRTSubmission = z.infer<typeof CRTSubmissionSchema>

@@ -4,7 +4,7 @@ import { CRTSubmission } from "@/app/crt/submit/actions";
 import { CRT_FIELD_NAMES, CRTSubmissionSchema } from "@/helpers/crt";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { HTMLInputTypeAttribute, PropsWithChildren, useState } from "react";
-import { useForm, SubmitHandler, Path } from "react-hook-form";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
 
 
 export function EditCRTForm({ values, id }: { id: number, values: CRTSubmission }) {
@@ -15,9 +15,10 @@ export function EditCRTForm({ values, id }: { id: number, values: CRTSubmission 
 
 export function CRTForm({ action, values }: { values?: CRTSubmission, action: (data: CRTSubmission) => Promise<any>; }) {
     const {
-        register, handleSubmit, formState: { errors }
+        register, handleSubmit, formState: { errors }, control
     } = useForm<CRTSubmission>({
-        resolver: zodResolver(CRTSubmissionSchema)
+        resolver: zodResolver(CRTSubmissionSchema),
+        values,
     });
     const [submitting, setSubmitting] = useState(false);
 
@@ -35,18 +36,34 @@ export function CRTForm({ action, values }: { values?: CRTSubmission, action: (d
         }
     };
 
-    function Input({ type, label, description, required }: { type?: HTMLInputTypeAttribute; required?: boolean; description?: string; label: Path<CRTSubmission>; }) {
+    function Input({ type, label, description, required }: { type?: HTMLInputTypeAttribute; required?: boolean; description?: string; label: keyof typeof CRT_FIELD_NAMES; }) {
         const title = CRT_FIELD_NAMES[label];
         return <div>
             <Label id={label} title={title} required={required} description={description} />
             <input
-                value={values && values[label] ? values[label] : undefined}
                 type={type}
                 {...register(label, { required: required, valueAsNumber: type == "number" })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md" />
             {errors[label]?.message && <div className="bg-red-400 text-white p-1">{errors[label].message}</div>}
         </div>;
     }
+
+    function ImagesSection({ defaultValue }: { defaultValue?: File[] }) {
+        const [images, setImages] = useState<File[]>(defaultValue || [])
+        return <Section title="Images">
+            <Controller control={control} name="images" render={({ field: { onChange, name } }) => (
+                <input className="w-full bg-gray-100 p-2 rounded-md text-black" name={name} type="file" multiple accept="image/*" onChange={(e) => {
+                    onChange([...Array.from(e.target.files || [])])
+                    setImages([...Array.from(e.target.files || [])])
+                }} />
+            )} />
+            <br />
+            {images.map((image) => (
+                <img key={image.name} src={URL.createObjectURL(image)} alt={image.name} />
+            ))}{errors["images"]?.message && <div className="bg-red-400 text-white p-1">{errors['images'].message}</div>}
+        </Section>
+    }
+
     return (
         <form className="min-h-screen p-8 max-w-4xl mx-auto space-y-6" onSubmit={handleSubmit(onSubmit)}>
             <h1 className="text-3xl font-bold mb-8">Submit CRT Information</h1>
@@ -88,22 +105,10 @@ export function CRTForm({ action, values }: { values?: CRTSubmission, action: (d
                 <Input type="string" label="yearLaunched" />
                 <Input type="string" label="yearDiscontinued" />
             </Section>
-            <ImagesSection />
+            <ImagesSection defaultValue={values?.images} />
             <SubmitButton disabled={submitting} />
         </form>
     );
-
-}
-
-function ImagesSection() {
-    const [images, setImages] = useState<File[]>([])
-    return <Section title="Images">
-        <input className="w-full bg-gray-100 p-2 rounded-md text-black" type="file" multiple accept="image/*" id="images" onChange={(e) => setImages(Array.from(e.target.files || []))} />
-        <br />
-        {images.map((image) => (
-            <img key={image.name} src={URL.createObjectURL(image)} alt={image.name} />
-        ))}
-    </Section>
 
 }
 function Section({ title, children }: { title: string; } & PropsWithChildren) {

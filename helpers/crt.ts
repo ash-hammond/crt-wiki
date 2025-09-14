@@ -2,7 +2,7 @@ import { CRT } from "@/generated/prisma";
 import * as z from "zod";
 
 const stringSchema = z.string().min(3, { message: "Must be at least 3 characters" });
-const optionalString = stringSchema.optional().nullable()
+const optionalString = z.string().optional().nullable()
 const yearSchema = optionalString
 export const CRTSubmissionSchema = z.strictObject({
     model: stringSchema,
@@ -32,7 +32,7 @@ export const CRTSubmissionSchema = z.strictObject({
     summary: optionalString,
     similarMakesAndModels: optionalString,
     originalRemoteMakeAndModel: optionalString,
-    images: z.array(z.instanceof(File)).optional(),
+    images: z.array(z.instanceof(File)),
 });
 export const CRT_FIELD_NAMES = {
     brand: "Brand",
@@ -62,7 +62,6 @@ export const CRT_FIELD_NAMES = {
     audio: "Audio",
     purpose: "Purpose",
     summary: "Summary",
-    images: "Images",
 };
 export function getCRTDisplayName(crt: CRT) {
     const name = `${crt.brand} ${crt.model}`;

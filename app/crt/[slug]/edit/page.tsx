@@ -17,14 +17,19 @@ export default async function CRTEditPage({
     const crt = await prisma.cRT.findFirst({
         where: {
             id: id
+        },
+        include: {
+            images: true
         }
     })
 
     if (crt == null) return <NotFound />
+    const values = { ...crt } as unknown as Omit<CRTSubmission, "images"> & { images: File[] }
+    values.images = crt.images.map((image) => new File([image.data], image.description || "image.png"))
 
     return <div>
         <h1>CRT Edit</h1>
-        <EditCRTForm id={id} values={crt} />
+        <EditCRTForm id={id} values={values} />
 
     </div>
 }
