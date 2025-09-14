@@ -32,6 +32,7 @@ export const CRTSubmissionSchema = z.strictObject({
     summary: optionalString,
     similarMakesAndModels: optionalString,
     originalRemoteMakeAndModel: optionalString,
+    images: z.array(z.instanceof(File)).optional(),
 });
 export const CRT_FIELD_NAMES = {
     brand: "Brand",
@@ -61,6 +62,7 @@ export const CRT_FIELD_NAMES = {
     audio: "Audio",
     purpose: "Purpose",
     summary: "Summary",
+    images: "Images",
 };
 export function getCRTDisplayName(crt: CRT) {
     const name = `${crt.brand} ${crt.model}`;

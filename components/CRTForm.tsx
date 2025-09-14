@@ -4,7 +4,7 @@ import { CRTSubmission } from "@/app/crt/submit/actions";
 import { CRT_FIELD_NAMES, CRTSubmissionSchema } from "@/helpers/crt";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { HTMLInputTypeAttribute, PropsWithChildren, useState } from "react";
-import { useForm, SubmitHandler, FieldErrors, Path, UseFormRegister } from "react-hook-form";
+import { useForm, SubmitHandler, Path } from "react-hook-form";
 
 
 export function EditCRTForm({ values, id }: { id: number, values: CRTSubmission }) {
@@ -88,9 +88,22 @@ export function CRTForm({ action, values }: { values?: CRTSubmission, action: (d
                 <Input type="string" label="yearLaunched" />
                 <Input type="string" label="yearDiscontinued" />
             </Section>
+            <ImagesSection />
             <SubmitButton disabled={submitting} />
         </form>
     );
+
+}
+
+function ImagesSection() {
+    const [images, setImages] = useState<File[]>([])
+    return <Section title="Images">
+        <input className="w-full bg-gray-100 p-2 rounded-md text-black" type="file" multiple accept="image/*" id="images" onChange={(e) => setImages(Array.from(e.target.files || []))} />
+        <br />
+        {images.map((image) => (
+            <img key={image.name} src={URL.createObjectURL(image)} alt={image.name} />
+        ))}
+    </Section>
 
 }
 function Section({ title, children }: { title: string; } & PropsWithChildren) {

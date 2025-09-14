@@ -7,9 +7,17 @@ import * as z from "zod";
 export async function submitCRT(data: CRTSubmission) {
     CRTSubmissionSchema.parse(data)
     if (!verifyAdmin()) return false
+    const images = data.images
+    data.images = undefined
 
     const crt = await prisma.cRT.create({
-        data: data,
+        data: {
+            ...(data as Omit<CRTSubmission, "images">),
+            images: images.map((image) => ({
+                url: URL.createObjectURL(image),
+                description: image.name,
+            })),
+        },
         include: {
             images: true,
         },
