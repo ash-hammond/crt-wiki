@@ -64,7 +64,9 @@ export default async function RootLayout({
             <DiscordLoginButton />
           </div>
         </nav>
-        {children}
+        <main className="p-6">
+          {children}
+        </main>
       </body>
     </html>
   );
