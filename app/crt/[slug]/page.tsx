@@ -4,7 +4,7 @@ import DeleteCRTButton from "@/components/deleteCRTButton"
 import NotFound from "@/components/not-found"
 import { verifyAdmin } from "@/helpers/auth"
 import { CRT_FIELD_NAMES, getCRTDisplayName } from "@/helpers/crt"
-import Link from "next/link"
+import NavLink from "@/components/NavLink"
 
 export default async function BlogPostPage({
     params,
@@ -24,7 +24,7 @@ export default async function BlogPostPage({
 
     return (
         <div>
-            {isAdmin && <Link href={`${id}/edit`}>Edit CRT</Link>}
+            {isAdmin && <NavLink href={`${id}/edit`}>Edit CRT</NavLink>}
             {isAdmin && <DeleteCRTButton id={id} />}
             {isAdmin && !crt.verified && <ApproveCRTButton id={id} />}
             <h1>{getCRTDisplayName(crt)}</h1>

@@ -1,7 +1,7 @@
 import prisma from "@/client";
 import { verifyAdmin } from "@/helpers/auth";
 import { getCRTDisplayName } from "@/helpers/crt";
-import Link from "next/link";
+import NavLink from "@/components/NavLink";
 import { redirect } from "next/navigation";
 
 export default async function DashboardPage() {
@@ -17,7 +17,7 @@ export default async function DashboardPage() {
         <h2>Submissions awaiting approval</h2>
         <ul>
             {crts.map((crt, i) =>
-                <li key={i}><Link href={`/crt/${crt.id}`}>{getCRTDisplayName(crt)}</Link></li>
+                <li key={i}><NavLink href={`/crt/${crt.id}`}>{getCRTDisplayName(crt)}</NavLink></li>
             )}
         </ul>
     </div>

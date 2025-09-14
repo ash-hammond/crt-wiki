@@ -1,5 +1,5 @@
 'use server'
-import { CRTSubmission } from "@/app/submit/actions";
+import { CRTSubmission } from "@/app/crt/submit/actions";
 import prisma from "@/client";
 import { auth, isAdmin } from "@/helpers/auth";
 import { CRTSubmissionSchema } from "@/helpers/crt";

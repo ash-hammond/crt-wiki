@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom'
-import { submitCRT } from '@/app/submit/actions'
+import { submitCRT } from '@/app/crt/submit/actions'
 
 describe('Submit Form', () => {
   it('handles valid submission', async () => {

@@ -11,7 +11,7 @@ import assert from "assert"
 
 export async function verifyAdmin() {
     const session = await auth();
-    assert(session)
+    if (!session) return false
     return await isAdmin(session)
 }
 

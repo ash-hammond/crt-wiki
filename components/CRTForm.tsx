@@ -1,6 +1,6 @@
 'use client'
 import { editCRT } from "@/app/crt/[slug]/edit/actions";
-import { CRTSubmission } from "@/app/submit/actions";
+import { CRTSubmission } from "@/app/crt/submit/actions";
 import { CRT_FIELD_NAMES, CRTSubmissionSchema } from "@/helpers/crt";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { HTMLInputTypeAttribute, PropsWithChildren, useState } from "react";

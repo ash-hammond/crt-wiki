@@ -1,4 +1,4 @@
-import { CRTSubmission } from "@/app/submit/actions";
+import { CRTSubmission } from "@/app/crt/submit/actions";
 import prisma from "@/client";
 import { CRTForm, EditCRTForm } from "@/components/CRTForm";
 import NotFound from "@/components/not-found";
