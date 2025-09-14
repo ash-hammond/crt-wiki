@@ -4,6 +4,9 @@ import "./globals.css";
 import NavLink from "@/components/NavLink";
 import DiscordLoginButton from "@/components/DiscordLoginButton";
 import { verifyAdmin } from "@/helpers/auth";
+import CRTSearchBar from "@/components/CRTSearchBar";
+import prisma from "@/client";
+import { getCRTDisplayName } from "@/helpers/crt";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,6 +29,15 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const isAdmin = await verifyAdmin();
+  const crts = await prisma.cRT.findMany({
+    where: {
+      verified: true
+    }
+  })
+  const crtEntries = crts.map((crt) => ({
+    id: crt.id,
+    name: getCRTDisplayName(crt)
+  }))
 
   return (
     <html lang="en">
@@ -50,7 +62,7 @@ export default async function RootLayout({
             target="_blank"
             rel="noopener noreferrer"
           >
-            GitHub Repository
+            GitHub
           </a>
           <a
             className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium"
@@ -58,8 +70,9 @@ export default async function RootLayout({
             target="_blank"
             rel="noopener noreferrer"
           >
-            Join our discord
+            Discord
           </a>
+          <CRTSearchBar crtEntries={crtEntries} />
           <div className="ml-auto">
             <DiscordLoginButton />
           </div>
