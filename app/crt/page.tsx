@@ -24,7 +24,7 @@ export default async function CRTListPage() {
     const sortedManufacturers = Object.keys(crtsByManufacturer).sort()
 
     return <div>
-        <Link href="/submit" className="py-1 px-4 bg-blue-500 text-white rounded-md mb-4">Submit CRT</Link>
+        <Link href="/crt/submit" className="py-1 px-4 bg-blue-500 text-white rounded-md mb-4">Submit CRT</Link>
         <h1 className="text-2xl font-bold mt-4">CRTs</h1>
         <ul className="list-none">
             {sortedManufacturers.map((manufacturer) => (
