@@ -1,4 +1,5 @@
 import prisma from "@/client"
+import Image from 'next/image'
 import ApproveCRTButton from "@/components/ApproveCRTButton"
 import DeleteCRTButton from "@/components/deleteCRTButton"
 import NotFound from "@/components/not-found"
@@ -16,6 +17,14 @@ export default async function BlogPostPage({
     const crt = await prisma.cRT.findFirst({
         where: {
             id: id
+        },
+        include: {
+            images: {
+                select: {
+                    id: true,
+                    description: true
+                }
+            }
         }
     })
     const isAdmin = await verifyAdmin()
@@ -55,7 +64,10 @@ export default async function BlogPostPage({
                     "purpose",
                 ] as (keyof typeof CRT_FIELD_NAMES)[])
                     .map((field, i) => <p key={i}>{CRT_FIELD_NAMES[field]}: {crt[field]}</p>)
+
             }
+            <h1 className="text-2xl font-bold">Images</h1>
+            {crt.images.map((image) => <Image width={400} height={400} key={image.id} src={`/crt/photo/${image.id}`} alt={image.description || "image"} ></Image>)}
         </div>
     )
 }
