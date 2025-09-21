@@ -11,11 +11,23 @@ export async function editCRT(data: CRTSubmission, id: number) {
     assert(session)
     if (!isAdmin(session)) return false
 
+    const images = await Promise.all(data.images.map(async (image) => ({
+        description: image.name,
+        data: Buffer.from(await image.arrayBuffer())
+    })))
+    const { images: _, ...updateData } = data;
+
     const crt = await prisma.cRT.update({
         where: {
             id: id
         },
-        data: data,
+        data: {
+            ...updateData,
+            images: {
+                deleteMany: {},
+                create: images
+            }
+        },
     });
 
     return { success: true, crt };
