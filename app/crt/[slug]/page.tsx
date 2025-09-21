@@ -8,6 +8,8 @@ import { CRT_FIELD_NAMES, getCRTDisplayName } from "@/helpers/crt"
 import NavLink from "@/components/NavLink"
 import React from "react"
 
+export const fetchCache = 'force-no-store';
+
 export default async function BlogPostPage({
     params,
 }: {
