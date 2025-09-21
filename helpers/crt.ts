@@ -1,4 +1,4 @@
-import { CRT } from "@/generated/prisma";
+import { CRT } from "@prisma/client";
 import * as z from "zod";
 
 const stringSchema = z.string().min(3, { message: "Must be at least 3 characters" });
