@@ -6,6 +6,7 @@ import NotFound from "@/components/not-found"
 import { verifyAdmin } from "@/helpers/auth"
 import { CRT_FIELD_NAMES, getCRTDisplayName } from "@/helpers/crt"
 import NavLink from "@/components/NavLink"
+import React from "react"
 
 export default async function BlogPostPage({
     params,
@@ -36,38 +37,58 @@ export default async function BlogPostPage({
             {isAdmin && <NavLink href={`${id}/edit`}>Edit CRT</NavLink>}
             {isAdmin && <DeleteCRTButton id={id} />}
             {isAdmin && !crt.verified && <ApproveCRTButton id={id} />}
-            <h1>{getCRTDisplayName(crt)}</h1>
-            {
-                ([
-                    "tubeMake",
-                    "series",
-                    "summary",
-                    "similarMakesAndModels",
-                    "originalRemoteMakeAndModel",
-                    "screenSize",
-                    "supportedResolutions",
-                    "degaussingType",
-                    "aspectRatio",
-                    "weight",
-                    "physicalDescription",
-                    "inputs",
-                    "serviceManualLink",
-                    "ownersManualLink",
-                    "manufacturer",
-                    "assemblyCountry",
-                    "yearLaunched",
-                    "yearDiscontinued",
-                    "author",
-                    "formats",
-                    "chassis",
-                    "audio",
-                    "purpose",
-                ] as (keyof typeof CRT_FIELD_NAMES)[])
-                    .map((field, i) => <p key={i}>{CRT_FIELD_NAMES[field]}: {crt[field]}</p>)
+            <h1 className="text-4xl mb-4">{getCRTDisplayName(crt)}</h1>
+            <div className="grid grid-cols-2 w-xl">
+                {
+                    ([
+                        "tubeMake",
+                        "series",
+                        "summary",
+                        "similarMakesAndModels",
+                        "originalRemoteMakeAndModel",
+                        "screenSize",
+                        "supportedResolutions",
+                        "degaussingType",
+                        "aspectRatio",
+                        "weight",
+                        "physicalDescription",
+                        "inputs",
+                        "serviceManualLink",
+                        "ownersManualLink",
+                        "manufacturer",
+                        "assemblyCountry",
+                        "yearLaunched",
+                        "yearDiscontinued",
+                        "author",
+                        "formats",
+                        "chassis",
+                        "audio",
+                        "purpose",
+                    ] as (keyof typeof CRT_FIELD_NAMES)[])
+                        .map((field, i) => (
+                            <React.Fragment key={field}>
+                                <div className="border-2 border-slate-800 p-1">{CRT_FIELD_NAMES[field]}</div>
+                                <div className="border-2 border-slate-800 p-1">{crt[field]}</div>
+                            </React.Fragment>
+                        ))
 
-            }
-            <h1 className="text-2xl font-bold">Images</h1>
-            {crt.images.map((image) => <Image width={400} height={400} key={image.id} src={`/crt/photo/${image.id}`} alt={image.description || "image"} ></Image>)}
+                }
+            </div>
+
+            {crt.images.length > 0 && (
+                <>
+                    <h1 className="text-2xl font-bold">Images</h1>
+                    {crt.images.map((image) => (
+                        <Image
+                            width={400}
+                            height={400}
+                            key={image.id}
+                            src={`/crt/photo/${image.id}`}
+                            alt={image.description || "image"}
+                        />
+                    ))}
+                </>
+            )}
         </div>
     )
 }
