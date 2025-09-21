@@ -1,7 +1,7 @@
 import { mockDeep, mockReset, DeepMockProxy } from 'jest-mock-extended'
 
 import prisma from './client'
-import { Prisma, PrismaClient } from './generated/prisma'
+import { Prisma, PrismaClient } from '@prisma/client'
 
 type n = Prisma.CRTCreateInput
 jest.mock('./client', () => ({
