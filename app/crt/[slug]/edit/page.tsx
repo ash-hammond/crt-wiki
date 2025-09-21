@@ -25,7 +25,7 @@ export default async function CRTEditPage({
 
     if (crt == null) return <NotFound />
     const values = { ...crt } as unknown as Omit<CRTSubmission, "images"> & { images: File[] }
-    values.images = crt.images.map((image) => new File([image.data], image.description || "image.png"))
+    values.images = crt.images.map((image) => new File([image.data.buffer.slice() as ArrayBuffer], image.description || "image.png"))
 
     return <div>
         <h1>CRT Edit</h1>
