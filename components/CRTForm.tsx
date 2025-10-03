@@ -1,5 +1,5 @@
 'use client'
-import { editCRT } from "@/app/crt/[slug]/edit/actions";
+import { editCRT } from "@/app/crt/[id]/edit/actions";
 import { CRTSubmission } from "@/app/crt/submit/actions";
 import { CRT_FIELD_NAMES, CRTSubmissionSchema } from "@/helpers/crt";
 import { zodResolver } from "@hookform/resolvers/zod";

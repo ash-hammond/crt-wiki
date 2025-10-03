@@ -5,9 +5,10 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "prisma generate && prisma migrate deploy && next build --turbopack",
+    "shallow-build": "next build --turbopack",
     "start": "next start",
     "test": "jest",
-    "lint": "eslint .",
+    "lint": "eslint . --fix",
     "migrate": "prisma migrate dev"
   },
   "dependencies": {
