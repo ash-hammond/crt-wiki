@@ -4,7 +4,7 @@ import { submitCRT } from "./actions";
 import { CRTForm } from "@/components/CRTForm";
 
 export default function SubmitPage() {
-  return <CRTForm action={submitCRT} />
+  return <CRTForm onSubmit={submitCRT} />
 }
 
 

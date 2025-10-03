@@ -7,13 +7,14 @@ import { HTMLInputTypeAttribute, PropsWithChildren, useState } from "react";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 
 
-export function EditCRTForm({ values, id }: { id: number, values: CRTSubmission }) {
-    return <CRTForm values={values} action={async (data) => {
+export function EditCRTForm({ submission, id }: { id: number, submission: CRTSubmission }) {
+    return <CRTForm values={submission} onSubmit={async (data) => {
         return await editCRT(data, id)
     }} />
 }
 
-export function CRTForm({ action, values }: { values?: CRTSubmission, action: (data: CRTSubmission) => Promise<any>; }) {
+/// Used as the base form for both submit and edit CRT pages
+export function CRTForm({ onSubmit, values }: { values?: CRTSubmission, onSubmit: (data: CRTSubmission) => Promise<any>; }) {
     const {
         register, handleSubmit, formState: { errors }, control
     } = useForm<CRTSubmission>({
@@ -22,11 +23,11 @@ export function CRTForm({ action, values }: { values?: CRTSubmission, action: (d
     });
     const [submitting, setSubmitting] = useState(false);
 
-    const onSubmit: SubmitHandler<CRTSubmission> = async (formData) => {
+    const submitHandler: SubmitHandler<CRTSubmission> = async (formData) => {
         setSubmitting(true);
 
         try {
-            await action(formData);
+            await onSubmit(formData);
             alert("CRT submitted successfully!");
         } catch (error) {
             alert("Error submitting CRT. Please try again.");
@@ -65,7 +66,7 @@ export function CRTForm({ action, values }: { values?: CRTSubmission, action: (d
     }
 
     return (
-        <form className="min-h-screen p-8 max-w-4xl mx-auto space-y-6" onSubmit={handleSubmit(onSubmit)}>
+        <form className="min-h-screen p-8 max-w-4xl mx-auto space-y-6" onSubmit={handleSubmit(submitHandler)}>
             <h1 className="text-3xl font-bold mb-8">Submit CRT Information</h1>
             <Input required label="author" />
             <Label id="summary" title="Summary" required />

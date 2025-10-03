@@ -1,4 +1,3 @@
-import { CRTSubmission } from "@/app/crt/submit/actions";
 import prisma from "@/client";
 import { EditCRTForm } from "@/components/CRTForm";
 import NotFound from "@/components/not-found";
@@ -22,7 +21,7 @@ export default async function CRTEditPage({
 
     return <div>
         <h1>CRT Edit</h1>
-        <EditCRTForm id={id} values={{
+        <EditCRTForm id={id} submission={{
             ...crt,
             images: crt.images.map((image) =>
                 new File([image.data.buffer.slice() as ArrayBuffer], image.description || "image.png")
