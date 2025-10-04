@@ -3,9 +3,9 @@ import NavLink from "@/components/NavLink";
 export default function Home() {
   return (
     <div>
-      <h1>Community CRT Wiki</h1>
+      <h1>CRT Community Wiki</h1>
 
-      <p>Welcome to the Community CRT Wiki. Here you can find information about CRT TVs and how to repair them.</p>
+      <p>The CRT Community Wiki, bringing us all together.</p>
       <p>Be sure to check out the <NavLink href="/crt">CRT List</NavLink> to find out more about the CRTs we have on record.</p>
     </div>
   );
