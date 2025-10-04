@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true
   },
+  transpilePackages: ['next-auth'],
   experimental: {
     serverActions: {
       bodySizeLimit: "10mb"

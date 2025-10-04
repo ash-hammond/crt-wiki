@@ -6,6 +6,11 @@
 import type { Config } from 'jest';
 import nextJest from 'next/jest.js'
 
+const createJestConfig = nextJest({
+  // Provide the path to your Next.js app to load next.config.js and .env files in your test environment
+  dir: './',
+})
+
 const config: Config = {
   // All imported modules in your tests should be mocked automatically
   // automock: false,
@@ -59,6 +64,9 @@ const config: Config = {
   // },
 
   // Force coverage collection from ignored files using an array of glob patterns
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/$1',
+  },
   // forceCoverageMatch: [],
 
   // A path to a module which exports an async function that is triggered once before all test suites
@@ -93,9 +101,7 @@ const config: Config = {
   // ],
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
-  moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/$1',
-  },
+  // moduleNameMapper: {},
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   // modulePathIgnorePatterns: [],
@@ -142,7 +148,7 @@ const config: Config = {
   // setupFiles: [],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
-  // setupFilesAfterEnv: [],
+  setupFilesAfterEnv: [],
 
   // The number of seconds after which a test is considered as slow and reported as such in the results.
   // slowTestThreshold: 5,
@@ -180,7 +186,6 @@ const config: Config = {
   // testRunner: "jest-circus/runner",
 
   // A map from regular expressions to paths to transformers
-  // transform: undefined,
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   // transformIgnorePatterns: [
@@ -194,17 +199,12 @@ const config: Config = {
   // Indicates whether each individual test should be reported during the run
   // verbose: undefined,
 
+  preset: 'ts-jest',
   // An array of regexp patterns that are matched against all source file paths before re-running tests in watch mode
   // watchPathIgnorePatterns: [],
 
   // Whether to use watchman for file crawling
   // watchman: true,
-  setupFilesAfterEnv: ['<rootDir>/singleton.ts'],
 };
-
-const createJestConfig = nextJest({
-  // Provide the path to your Next.js app to load next.config.js and .env files in your test environment
-  dir: './',
-})
 
 export default createJestConfig(config);
