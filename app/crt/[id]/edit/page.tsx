@@ -1,5 +1,5 @@
 import prisma from "@/client";
-import { EditCRTForm } from "@/components/CRTForm";
+import { EditCRTForm } from "@/components/EditCRTForm";
 import NotFound from "@/components/not-found";
 
 export default async function CRTEditPage({

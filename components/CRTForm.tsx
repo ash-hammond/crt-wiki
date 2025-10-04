@@ -1,17 +1,10 @@
 'use client'
-import { editCRT } from "@/app/crt/[id]/edit/actions";
 import { CRTSubmission } from "@/app/crt/submit/actions";
 import { CRT_FIELD_NAMES, CRTSubmissionSchema } from "@/helpers/crt";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { HTMLInputTypeAttribute, PropsWithChildren, useState } from "react";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 
-
-export function EditCRTForm({ submission, id }: { id: number, submission: CRTSubmission }) {
-    return <CRTForm values={submission} onSubmit={async (data) => {
-        return await editCRT(data, id)
-    }} />
-}
 
 /// Used as the base form for both submit and edit CRT pages
 export function CRTForm({ onSubmit, values }: { values?: CRTSubmission, onSubmit: (data: CRTSubmission) => Promise<any>; }) {
