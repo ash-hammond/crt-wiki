@@ -7,6 +7,7 @@ import { verifyAdmin } from "@/helpers/auth";
 import CRTSearchBar from "@/components/CRTSearchBar";
 import prisma from "@/client";
 import { getCRTDisplayName } from "@/helpers/crt";
+import MobileMenu from "@/components/MobileMenu";
 
 export const metadata: Metadata = {
   title: "CRT Community Wiki",
@@ -35,19 +36,20 @@ export default async function RootLayout({
         className={`antialiased bg-stone-950 text-white`}
       >
         <nav className="flex items-center gap-4 px-6 py-4 border-b border-stone-800">
-          <NavLink href="/">
+          <MobileMenu isAdmin={isAdmin} />
+          <NavLink className="hidden sm:block" href="/">
             Home
           </NavLink>
-          <NavLink href="/crt">
+          <NavLink className="hidden sm:block" href="/crt">
             CRTs
           </NavLink>
           {isAdmin && (
-            <NavLink href="/dashboard">
+            <NavLink className="hidden sm:block" href="/dashboard">
               Dashboard
             </NavLink>
           )}
           <CRTSearchBar crtEntries={crtEntries} />
-          <div className="ml-auto">
+          <div className="ml-auto hidden sm:block">
             <DiscordLoginButton />
           </div>
         </nav>
