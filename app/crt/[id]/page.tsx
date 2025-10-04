@@ -10,16 +10,16 @@ import React from "react"
 
 export const fetchCache = 'force-no-store';
 
-export default async function BlogPostPage({
+export default async function CRTPage({
     params,
 }: {
-    params: Promise<{ slug: string }>
+    params: Promise<{ id: string }>
 }) {
-    const { slug } = await params
-    const id = parseInt(slug)
+    const { id } = await params
+    const crtId = parseInt(id)
     const crt = await prisma.cRT.findFirst({
         where: {
-            id: id
+            id: crtId
         },
         include: {
             images: {
@@ -36,9 +36,9 @@ export default async function BlogPostPage({
 
     return (
         <div>
-            {isAdmin && <NavLink href={`${id}/edit`}>Edit CRT</NavLink>}
-            {isAdmin && <DeleteCRTButton id={id} />}
-            {isAdmin && !crt.verified && <ApproveCRTButton id={id} />}
+            {isAdmin && <NavLink href={`${crtId}/edit`}>Edit CRT</NavLink>}
+            {isAdmin && <DeleteCRTButton id={crtId} />}
+            {isAdmin && !crt.verified && <ApproveCRTButton id={crtId} />}
             <h1 className="text-4xl mb-4">{getCRTDisplayName(crt)}</h1>
             <div className="grid grid-cols-2 w-xl">
                 {
