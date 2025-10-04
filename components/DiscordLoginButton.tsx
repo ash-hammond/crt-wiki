@@ -18,7 +18,7 @@ export default function DiscordLoginButton() {
             signOut()
         }}>Logout</button>
     }
-    return <button onClick={() => {
+    return <button className="text-white px-4 py-2 rounded-md border-white border-2 hover:bg-stone-800" onClick={() => {
         signIn("discord")
     }}>Login with Discord</button>
 }
